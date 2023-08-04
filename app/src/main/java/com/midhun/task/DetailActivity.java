@@ -3,12 +3,13 @@ package com.midhun.task;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -25,9 +26,18 @@ public class DetailActivity extends AppCompatActivity {
         TextView firstdata = findViewById(R.id.firstdata);
         TextView lastdata = findViewById(R.id.lastdata);
         TextView platform = findViewById(R.id.platform);
+        ImageButton backbtn = findViewById(R.id.backbtn);
+        Button addremovefav = findViewById(R.id.addtofav);
+
+        backbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DetailActivity.this.finish();
+            }
+        });
 
         Intent intent = getIntent();
-        String name = intent.getStringExtra("key");
+        final String name = intent.getStringExtra("key");
         SharedPreferences preferences =this.getSharedPreferences("fulldata",0);
         String cryptodata = preferences.getString(name, "default value");
 
@@ -51,5 +61,32 @@ public class DetailActivity extends AppCompatActivity {
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
+
+        SharedPreferences favpreferences =this.getSharedPreferences("favdata",0);
+        final SharedPreferences.Editor editor = this.getSharedPreferences("favdata", MODE_PRIVATE).edit();
+        String favid = favpreferences.getString(name, "false");
+
+        if(favid.equals("false")){
+            addremovefav.setText("Add to favourites");
+            addremovefav.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    editor.putString(name, "true");
+                    editor.commit();
+                }
+            });
+        }
+        else{
+            addremovefav.setText("Remove from favourites");
+            addremovefav.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    editor.putString(name, "false");
+                    editor.commit();
+                }
+            });
+        }
+
+
     }
 }
