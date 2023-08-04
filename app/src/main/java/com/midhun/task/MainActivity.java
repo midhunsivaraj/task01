@@ -11,7 +11,6 @@ public class MainActivity extends AppCompatActivity {
 
     TabLayout tabLayout;
     ViewPager viewPager;
-    //PullRefreshLayout pull_layout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,7 +19,6 @@ public class MainActivity extends AppCompatActivity {
 
         tabLayout = findViewById(R.id.tab_Layout);
         viewPager = findViewById(R.id.view_Pager);
-        //pull_layout = (PullRefreshLayout) findViewById(R.id.swipeRefreshLayout);
 
         final FragAdapter adapter = new FragAdapter(this,getSupportFragmentManager(), tabLayout.getTabCount());
         viewPager.setAdapter(adapter);

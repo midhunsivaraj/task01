@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="30sp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="100px"
+        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+        android:text="BTC" />
+
+    <TextView
+        android:id="@+id/fullname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10px"
+        android:layout_below="@+id/name"
+        android:text="Bitcoin" />
+
+    <TextView
+        android:id="@+id/rank"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:layout_marginTop="120px"
+        android:layout_marginLeft="50px"
+        android:layout_below="@+id/fullname"
+        android:text="Rank : 1" />
+
+    <TextView
+        android:id="@+id/firstdata"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:layout_marginTop="40px"
+        android:layout_marginLeft="50px"
+        android:layout_below="@+id/rank"
+        android:text="First historical data : 2013-04-28T18:47:21.000Z" />
+
+    <TextView
+        android:id="@+id/lastdata"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:layout_marginTop="40px"
+        android:layout_marginLeft="50px"
+        android:layout_below="@+id/firstdata"
+        android:text="Last historical data : 2013-04-28T18:47:21.000Z" />
+
+    <TextView
+        android:id="@+id/platform"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:layout_marginTop="40px"
+        android:layout_marginLeft="50px"
+        android:layout_below="@+id/lastdata"
+        android:text="Platform : Etherium" />
+
+</RelativeLayout>

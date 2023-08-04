@@ -1,13 +1,19 @@
 package com.midhun.task;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.app.ProgressDialog;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -66,6 +72,17 @@ public class CryptoFragment extends Fragment {
         adapter = new CryptoAdapter(getActivity(), R.layout.row_item, cryptoList);
         lv.setAdapter(adapter);
 
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                Intent i = new Intent(getActivity(), DetailActivity.class);
+                i.putExtra("key",cryptoList.get(position).getName());
+                startActivity(i);
+            }
+        });
+
+
         lv.setOnScrollListener(new AbsListView.OnScrollListener() {
             public void onScrollStateChanged(AbsListView view, int scrollState) {
             }
@@ -112,7 +129,6 @@ public class CryptoFragment extends Fragment {
         protected Boolean doInBackground(String... urls) {
 
             try {
-                int start = 1;
                 URL url = new URL(urls[0]);
 
 
@@ -143,6 +159,7 @@ public class CryptoFragment extends Fragment {
 
                     JSONObject jsonObject = new JSONObject(stringResult);
                     JSONArray jarray = jsonObject.getJSONArray("data");
+                    SharedPreferences.Editor editor = getActivity().getSharedPreferences("fulldata", MODE_PRIVATE).edit();
 
                     for (int i = 0; i < jarray.length(); i++) {
                         JSONObject object = jarray.getJSONObject(i);
@@ -151,7 +168,8 @@ public class CryptoFragment extends Fragment {
 
                         cmdl.setName(object.getString("symbol"));
                         cmdl.setFullname(object.getString("name"));
-
+                        editor.putString(object.getString("symbol"), object.toString());
+                        editor.commit();
                         cryptoList.add(cmdl);
                     }
                     return true;
@@ -173,6 +191,8 @@ public class CryptoFragment extends Fragment {
 
             dialog.dismiss();
             adapter.notifyDataSetChanged();
+            //SharedPreferences preferences = getActivity().getSharedPreferences("fulldata",0);
+            //String myBackgroundPreference = preferences.getString("BTC", "default value");
             if(result == false)
                 Toast.makeText(getActivity(), "Unable to fetch data from server", Toast.LENGTH_LONG).show();
 
