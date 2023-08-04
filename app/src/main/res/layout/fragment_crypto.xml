@@ -5,10 +5,26 @@
     android:layout_height="match_parent"
     tools:context="com.midhun.task.CryptoFragment">
 
-
-    <ListView
-        android:id="@+id/ListViewCrypto"
+    <com.baoyz.widget.PullRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent">
+
+        <ListView
+            android:id="@+id/ListViewCrypto"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+        </ListView>
+
+    </com.baoyz.widget.PullRefreshLayout>
+
+    <Button
+        android:id="@+id/more"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center"
+        android:layout_marginBottom="80px"
+        android:visibility="gone"
+        android:text="Load more" />
 
 </FrameLayout>

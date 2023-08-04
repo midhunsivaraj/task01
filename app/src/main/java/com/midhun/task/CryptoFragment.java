@@ -7,10 +7,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
+
+import com.baoyz.widget.PullRefreshLayout;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -24,13 +28,13 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 
-import javax.net.ssl.HttpsURLConnection;
-
 public class CryptoFragment extends Fragment {
 
     ListView lv;
     ArrayList<CryptoModal> cryptoList;
     CryptoAdapter adapter;
+    PullRefreshLayout layout;
+    Button loadmore;
 
     public CryptoFragment() {
     }
@@ -40,14 +44,54 @@ public class CryptoFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View vw=inflater.inflate(R.layout.fragment_crypto, container, false);
-        lv=(ListView) vw.findViewById(R.id.ListViewCrypto);
+        lv = vw.findViewById(R.id.ListViewCrypto);
+        loadmore = vw.findViewById(R.id.more);
+        layout = vw.findViewById(R.id.swipeRefreshLayout);
+        layout.setRefreshStyle(PullRefreshLayout.STYLE_MATERIAL);
+        layout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                Log.e("REFRESH", "STARTED");
+                cryptoList.clear();
+                cryptoList = new ArrayList<CryptoModal>();
+                adapter.notifyDataSetChanged();
+                new JSONAsynTask().execute("https://pro-api.coinmarketcap.com/v1/cryptocurrency/map?start=1&limit=25");
+                adapter = new CryptoAdapter(getActivity(), R.layout.row_item, cryptoList);
+                lv.setAdapter(adapter);
+                layout.setRefreshing(false);
+            }
+        });
         cryptoList = new ArrayList<CryptoModal>();
         new JSONAsynTask().execute("https://pro-api.coinmarketcap.com/v1/cryptocurrency/map?start=1&limit=25");
         adapter = new CryptoAdapter(getActivity(), R.layout.row_item, cryptoList);
-
         lv.setAdapter(adapter);
-        return  vw;
 
+        lv.setOnScrollListener(new AbsListView.OnScrollListener() {
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+            }
+
+            public void onScroll(AbsListView view, int firstVisibleItem,
+                                 int visibleItemCount, final int totalItemCount) {
+
+                if(firstVisibleItem+visibleItemCount == totalItemCount && totalItemCount!=0)
+                {
+                    Log.e("Scroll", "total="+totalItemCount);
+                    loadmore.setVisibility(View.VISIBLE);
+                    loadmore.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            loadmore.setVisibility(View.GONE);
+                            new JSONAsynTask().execute("https://pro-api.coinmarketcap.com/v1/cryptocurrency/map?start="+totalItemCount+"&limit=25");
+                        }
+                    });
+                }
+                else{
+                    loadmore.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        return  vw;
     }
 
     class JSONAsynTask extends AsyncTask<String, Void, Boolean> {
