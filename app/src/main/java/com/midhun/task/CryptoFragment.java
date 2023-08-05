@@ -190,8 +190,6 @@ public class CryptoFragment extends Fragment {
 
             dialog.dismiss();
             adapter.notifyDataSetChanged();
-            //SharedPreferences preferences = getActivity().getSharedPreferences("fulldata",0);
-            //String myBackgroundPreference = preferences.getString("BTC", "default value");
             if(result == false)
                 Toast.makeText(getActivity(), "Unable to fetch data from server", Toast.LENGTH_LONG).show();
 

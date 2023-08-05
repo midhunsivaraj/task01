@@ -27,7 +27,7 @@ public class DetailActivity extends AppCompatActivity {
         TextView lastdata = findViewById(R.id.lastdata);
         TextView platform = findViewById(R.id.platform);
         ImageButton backbtn = findViewById(R.id.backbtn);
-        Button addremovefav = findViewById(R.id.addtofav);
+        final Button addremovefav = findViewById(R.id.addtofav);
 
         backbtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,6 +73,7 @@ public class DetailActivity extends AppCompatActivity {
                 public void onClick(View view) {
                     editor.putString(name, "true");
                     editor.commit();
+                    addremovefav.setText("Remove from favourites");
                 }
             });
         }
@@ -83,6 +84,7 @@ public class DetailActivity extends AppCompatActivity {
                 public void onClick(View view) {
                     editor.putString(name, "false");
                     editor.commit();
+                    addremovefav.setText("Add to favourites");
                 }
             });
         }
